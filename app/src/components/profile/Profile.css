@@ -1,0 +1,227 @@
+.profileMain{
+    flex: 4 1;
+    padding: 10px 40px;
+    overflow-y: scroll;
+    height: calc(100vh - 56px);
+    background-color: #eee;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.profileMain::-webkit-scrollbar{
+    display: none;
+}
+
+.coverImg{
+    width: 117%;
+    height: 300px;
+    position: relative;
+    top: -10px;
+    left: -40px;
+    right: -40px;
+    object-fit: cover;
+}
+
+.sec2Pro{
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 24px -10px rgba(0, 0, 0, 0.38);
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sec2Pro > .icons{
+    display: flex;
+    gap: 5px;
+    justify-self: flex-start;
+    flex:1;
+}
+
+.sec2Pro  > .detailsPro{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    flex: 1;
+}
+
+.sec2Pro  > .detailsPro > .namePro{
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.sec2Pro  > .detailsPro > .locationLang{
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    width: 150px;
+}
+
+.sec2Pro  > .detailsPro > .locationLang > div{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+}
+
+.sec2Pro  > .detailsPro > button{
+    border: none;
+    background-color: #5a6ef5;
+    padding: 5px;
+    border-radius: 3px;
+    color: white;
+    cursor: pointer;
+    outline: none;
+}
+
+.sec2Pro > .thirDiv{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+    flex: 1;
+}
+
+.proPhoto{
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    top: -115px;
+    left:0;
+    right: 0;
+    margin: auto;
+}
+
+.profilePosts{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Extra Small Devices (Phones) */
+@media (max-width: 575px) {
+    /* Styles for extra small devices */
+    .samue{
+        font-size: 14px !important;
+    }
+    .sec2Pro{
+        padding: 20px !important;
+        gap: 10px;
+    }
+
+    .proPhoto{
+        width: 100px;
+        height: 100px;
+        top: -85px;
+    }
+    
+    .sec2Pro  > .detailsPro > .namePro{
+        font-size: 15px;
+    }
+    
+    .sec2Pro > .thirDiv{
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 5px;
+        flex: 1;
+    }
+
+    .icons{
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: repeat(3,1fr);
+        justify-content: center;
+    }
+
+    .icons > svg:last-child{
+        justify-self: center;
+        grid-column: span 2;
+        margin-right: 25%;
+    }
+
+    .samue{
+        font-size: 18px !important;
+    }
+  }
+
+  @media (min-width: 530px) and (max-width: 575px){
+    .icons{
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: repeat(3,1fr);
+        justify-content: center;
+    }
+
+    .icons > svg:last-child{
+        justify-self: center;
+        grid-column: span 2;
+        margin-right: 25%;
+    }
+
+    .samue{
+        font-size: 18px !important;
+    }
+
+  }
+
+  /* Small Devices (Tablets) */
+  @media (min-width: 576px) and (max-width: 767px) {
+    /* Styles for small devices */
+    .proNamehider{
+        display: none !important;
+    }
+    .rightSiders{
+        font-size: 18px !important;
+    }
+    .samue{
+        font-size: 18px !important;
+    }
+
+    .icons{
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: repeat(3,1fr);
+        justify-content: center;
+    }
+
+    .icons > svg:last-child{
+        justify-self: center;
+        grid-column: span 2;
+        margin-right: 25%;
+    }
+
+    .samue{
+        font-size: 25px !important;
+    }
+  }
+  
+  /* Medium Devices (Laptops and Small Desktops) */
+  @media (min-width: 768px) and (max-width: 991px) {
+    /* Styles for medium devices */
+    .samue{
+        font-size: 20px !important;
+    }
+  }
+  
+  @media (min-width: 992px) and (max-width: 1102px){
+    .rightbar{
+        display: none;
+    }
+  }
+
+  /* Large Devices (Desktops) */
+  @media (min-width: 992px) and (max-width: 1199px) {
+    /* Styles for large devices */
+    .samue{
+        font-size: 18px !important;
+    }
+  }
+  

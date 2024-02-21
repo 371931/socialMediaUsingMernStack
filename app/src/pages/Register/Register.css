@@ -1,0 +1,181 @@
+.container {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: aquamarine;
+}
+
+.card {
+    display: flex;
+    width: 50%;
+    height: 600px;
+    background-color: white;
+    border-radius: 25px;
+}
+
+.right {
+    flex: 1;
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    color: white;
+    padding: 30px;
+    background: linear-gradient(rgba(39, 11, 96, 0.8), rgba(39, 11, 96, 0.8)), url("../../../public/assets/images/leftbg.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 25px;
+}
+
+.right>h1 {
+    font-size: 80px;
+    line-height: 100px;
+}
+
+.right>p {
+    word-spacing: 2px;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 30px;
+}
+
+.but {
+    align-self: center;
+}
+
+.button {
+    width: 120px;
+    padding: 10px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all .3s ease-in-out;
+}
+
+.button:hover {
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+}
+
+.left {
+    flex: 1;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+
+.left>form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.left>form>input,
+div>input {
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    outline: none;
+    width: 100%;
+}
+
+.left>form>div {
+    position: relative;
+    display: flex;
+}
+
+.left>form>div>img {
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    right: 10px;
+    top: 15px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.left>form>button {
+    padding: 10px;
+    border: none;
+    background-color: aquamarine;
+    width: 60%;
+    align-self: center;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+}
+
+.left>form>button:hover {
+    background-color: transparent;
+    border: 1px solid black;
+}
+
+/* Extra Small Devices (Phones) */
+@media (max-width: 575px) {
+    /* Styles for extra small devices */
+
+    .card{
+        width: 90%;
+        height: 500px;
+    }
+
+    .right{
+        display: none;
+        padding: 20px;
+    }
+
+    .but2{
+        display: block;
+    }   
+}
+
+/* Small Devices (Tablets) */
+@media (min-width: 576px) and (max-width: 767px) {
+
+    /* Styles for small devices */
+    .card{
+        width: 90%;
+        height: 500px;
+    }
+
+    .right{
+        display: none;
+        padding: 20px;
+    }   
+
+    .but2{
+        display: block;
+    }
+}
+
+/* Medium Devices (Laptops and Small Desktops) */
+@media (min-width: 768px) and (max-width: 991px) {
+
+    /* Styles for medium devices */
+    .card{
+        width: 60%;
+        height: 500px;
+    }
+
+    .right{
+        display: none;
+        padding: 20px;
+    }
+}
+
+/* Large Devices (Desktops) */
+@media (min-width: 992px) and (max-width: 1199px) {
+
+    .left{
+        padding: 20px;
+    }
+}

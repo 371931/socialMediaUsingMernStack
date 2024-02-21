@@ -1,0 +1,23 @@
+posts schema : 
+db.posts.insertOne({
+  username: "",
+  email: "",
+  userId: "",
+  content: "",
+  postedDate:""
+})  
+
+followers :
+db.followers.insertOne({
+  followerId: "",
+  followedId: []  
+})
+
+comments schema:
+db.comments.insertOne({
+  postId: "",
+  comment: "",
+  username: "",
+  proPic:"",
+  createdDate: ""
+})

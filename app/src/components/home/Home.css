@@ -1,0 +1,178 @@
+.home{
+    background-color: #eee;
+    flex: 4;
+    height: calc(100vh - 56px);
+    overflow-y: scroll;
+    padding: 10px 40px;
+}
+
+.home::-webkit-scrollbar{
+    display: none;
+}
+
+.homePosts{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+@media (max-width: 530px) {
+    /* Styles for extra small devices */
+    .nav-right{
+        display: none;
+    }
+
+    .search > input{
+        display: none;
+    }
+
+    .nav{
+        height: 56px;
+    }
+
+    .nav-left{
+        width: 100%;
+        justify-content: space-between !important;
+        padding-right: 20px;
+    }
+
+    .leftBar,.rightbar{
+        display: none;
+    }
+
+    .home,.profileMain{
+        padding: 10px !important;
+    }
+
+    .searchLaptop{
+        display: none;
+    }
+
+    .searchMobile{
+        display: block;
+    }
+
+    .searchMobile > input{
+        border: 1px solid #ccc;
+        width: 300px;
+        padding: 10px 40px;
+        position: absolute;
+        top: 58px;
+        left:0;
+        width: 100%;
+        border-radius: 25px;
+    }
+
+    .stories{
+        height: fit-content !important;
+        gap: 13px !important;
+    }
+
+    .storieMy,.otherSto{
+        min-width: 50px !important;
+        height: 50px !important;
+    }
+
+    .storieMy > img,.otherSto > img{
+        border-radius: 50% !important;
+    }
+
+    .storieMy > div:last-child,.otherSto > div:last-child{
+        visibility: hidden;
+    }
+
+    .storieMy > .action{
+        top: 30px;
+        left: 30px !important;
+    }
+  }
+
+  @media (min-width: 530px) and (max-width: 645px){
+    .proNamehider{
+        display: none;
+    }
+
+    .icons{
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: repeat(3,1fr);
+        justify-content: center;
+    }
+
+    .icons > svg:last-child{
+        justify-self: center;
+        grid-column: span 2;
+        margin-right: 15px;
+    }
+
+    .leftBar{
+        display: none;
+    }
+  }
+
+  /* Small Devices (Tablets) */
+  @media (min-width: 530px) and (max-width: 767px) {
+    /* Styles for small devices */
+    .searchLaptop{
+        display: none;
+    }
+
+    .searchMobile{
+        display: block;
+        position: relative;
+        top: 3px;
+        cursor: pointer;
+    }
+    
+    .searchMobile > input{
+        border: 1px solid #ccc;
+        width: 300px;
+        padding: 10px 40px;
+        position: absolute;
+        top: 40px;
+        left: -100px;
+        width: 300px;
+        border-radius: 25px;
+    }
+
+    .stories{
+        height: 200px !important;
+    }
+
+    .rightbar{
+        display: none;
+    }
+  }
+  
+  /* Medium Devices (Laptops and Small Desktops) */
+  @media (min-width: 768px) and (max-width: 991px) {
+    /* Styles for medium devices */
+    .searchLaptop{
+        display: none;
+    }
+
+    .searchMobile{
+        display: block;
+        position: relative;
+        top: 3px;
+    }
+    
+    .searchMobile > input{
+        border: 1px solid #ccc;
+        width: 300px;
+        padding: 10px 40px;
+        position: absolute;
+        top: 40px;
+        left: -100px;
+        width: 300px;
+        border-radius: 25px;
+    }
+
+    .stories{
+        height: 200px !important;
+    }
+
+    .rightbar{
+        display: none;
+    }
+  }
