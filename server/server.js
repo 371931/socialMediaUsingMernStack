@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import router from "./Routes/auth.js";
 import postRouter from "./Routes/posts.js";
+import commentRoute from "./Routes/comments.js";
 import env from "dotenv";
 import cookieParser from "cookie-parser";
 import multer from "multer";
@@ -37,6 +38,7 @@ app.post("/post/upload",upload.single("file"),(req,res)=>{
 
 app.use("/auth", router);
 app.use("/post", postRouter);
+app.use("/comment", commentRoute);
 
 app.listen(3001,(err)=>{
     err && console.log(err);

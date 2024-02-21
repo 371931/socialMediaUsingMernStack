@@ -32,7 +32,7 @@ export default function AddPost() {
     });
   }
 
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   const mutation = useMutation((newPost) => {
     return axios.post("http://localhost:3001/post/addPost", newPost, { withCredentials: true })
@@ -44,13 +44,9 @@ export default function AddPost() {
       onError: (error) => {
         console.log(error);
       },
-    });
+  });
 
   const [file, upfile] = useState(null);
-
-  useState(()=>{
-    console.log(file);
-  },[file])
 
   const upload = async () => {
     try {

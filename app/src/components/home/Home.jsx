@@ -6,6 +6,7 @@ import Posts from "../Posts/Posts";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import AddPost from "../addPost/AddPost";
+import moment from "moment";
 
 function Home() {
 
@@ -28,7 +29,7 @@ function Home() {
             <Stories />
             <AddPost />
             <div className="homePosts">
-                {isPending ? "loading" : data ? (data.map(val=><Posts content={val.content} key={val._id} id={val._id} userId={val.userId}  username={val.username} imgSrc={val.imgUrl ? val.imgUrl : null}/>)) : "Can not Connect to Api"}
+                {isPending ? "loading" : data ? (data.map(val=><Posts content={val.content} key={val._id} id={val._id} userId={val.userId}  username={val.username} imgSrc={val.imgUrl ? val.imgUrl : null} postCretedDate={val.postedDate}/>)) : "Can not Connect to Api"}
             </div>
         </div>
     );

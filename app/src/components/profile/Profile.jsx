@@ -28,6 +28,9 @@ function Profile() {
             ).catch(err=> console.log(err))
     })
 
+    let postOfUser = data && data.filter(val=> val.userId == currentUser._id);
+
+    console.log(postOfUser);
 
     return (
         <div className="profileMain" style={{ backgroundColor: !mode && "#333", color: !mode && "white" }}>
@@ -55,7 +58,7 @@ function Profile() {
                 </div>
             </div>
             <div className="profilePosts">
-                {isPending ? "Loding" : (data.map(val => <Posts content={val.content} key={val._id} id={val._id} userId={val.userId}  username={val.username}/>))}
+                {isPending ? "Loding" : data && (postOfUser.map(val => <Posts content={val.content} key={val._id} id={val._id} userId={val.userId}  username={val.username} postCretedDate={val.postedDate}/>))}
             </div>
         </div>
     );
