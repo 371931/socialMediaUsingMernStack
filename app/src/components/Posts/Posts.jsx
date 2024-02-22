@@ -1,9 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { myContext } from "../../App";
 import "./Posts.css"
 import Avatar from '@mui/material/Avatar';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import Post from "../../assets/images/sto1.jpg";
 import { Link } from "react-router-dom";
 import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined';
 import ShareIcon from '@mui/icons-material/Share';
@@ -12,7 +11,7 @@ import sam from "../../assets/images/sto1.jpg";
 import moment from "moment";
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { AuthContext } from '../../context/authContext';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
@@ -21,68 +20,56 @@ export default function Posts(props) {
     const [comments, upComments] = useState(false);
     const { mode } = useContext(myContext);
     const { currentUser } = useContext(AuthContext);
-    const [liked,upliked] = useState(true);
+    const queryClient = useQueryClient();
 
     const { isPending, error, data } = useQuery({
-        queryKey: ['comment'],
+        queryKey: ['likes'],
         queryFn: async () => {
             try {
-                let response = await axios.get("http://localhost:3001/comment/allComments", { withCredentials: true })
-                return response.data;
+                const response = await axios.get(`http://localhost:3001/likes/getLikes?postId=${props.id}`, { withCredentials: true });
+                return response.data
             } catch (err) {
-                console.log(err);
+                console.error(err);
+                throw new Error('Failed to fetch likes');
             }
         }
     });
 
-    const [commentDetails, upComment] = useState({
-        postId: props.id,
-        username: currentUser.username,
-        proPic: "",
-        comment: ""
-    });
+    let liked = data && data.some(item => item.userId === currentUser._id && item.postId === props.id);
+    let [like, setLike] = useState(liked);
+    
+    const [likeCount,upLikeCoun] = useState(data && data.filter(val => val.postId === props.id).length);
+    
+    useEffect(()=>{
+        setLike(data && liked);
+        if (data) {
+            const count = data.filter(val => val.postId === props.id).length;
+            upLikeCoun(count);
+        }
+    },[liked,data]);
+    
+    let datas = {
+        userId: currentUser._id,
+        postId: props.id
+    }
 
-    const queryClient = useQueryClient();
-
-    const mutation = useMutation((newPost) => {
-        return axios.post("http://localhost:3001/comment/addComment", newPost, { withCredentials: true })
-    },
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries(["comment"]);
-            },
-            onError: (error) => {
-                console.log(error);
-            },
-        });
-
-    function onClickAdd(e) {
+    async function onClickLike(e) {
         e.preventDefault();
-        mutation.mutate({ commentDetails });
-
-        upComment({
-            postId: props.postId,
-            username: props.username,
-            proPic: "",
-            comment: ""
-        });
+        setLike(true);
+        await axios.post("http://localhost:3001/likes/likePost", datas, { withCredentials: true });
+        queryClient.invalidateQueries(['likes', props.id]);
     }
 
-    const onChai = (e) => {
-        let { name, value } = e.target;
-        upComment((prev) => {
-            return {
-                ...prev,
-                [name]: value
-            }
-        });
+    async function onCliDel() {
+        setLike(false);
+        await axios.delete("http://localhost:3001/likes/removeLike?postId=" + props.id + "&userId=" + currentUser._id, { withCredentials: true })
+        queryClient.invalidateQueries(['likes', props.id]);
     }
-
     return (
         <div className='posts'>
             <div className="post" style={{ backgroundColor: !mode && "#222", color: !mode && "white" }}>
                 <div className="headerPost">
-                    <Link to={`/profile/${props.userId}`} style={{ textDecoration: "none", color: !mode ? "white" : "black", outline: "none" }}>
+                    <Link to={`/profile/${props.username}`} style={{ textDecoration: "none", color: !mode ? "white" : "black", outline: "none" }}>
                         <div className="leftP">
                             <Avatar alt={props.username} src={sam} style={{ textDecoration: "none" }} sx={{ width: 30, height: 30 }} />
                             <div className="namePost">
@@ -99,22 +86,14 @@ export default function Posts(props) {
                 <div className="postContent">{props.content}</div>
                 {props.imgSrc && <img src={`/uploads/${props.imgSrc}`} alt="" className="possImg" />}
                 <div className="footerPost">
-                    <div>{liked ? <FavoriteOutlinedIcon style={{ fontSize: "18px", color:"red"}}/> : <FavoriteBorderOutlinedIcon style={{ fontSize: "18px" }}/> } Likes</div>
+                    <div>{ like ?
+                        <FavoriteOutlinedIcon style={{ fontSize: "18px", color: "red" }} onClick={onCliDel}/> :
+                        <FavoriteBorderOutlinedIcon style={{ fontSize: "18px" }} onClick={onClickLike} />
+                    } {likeCount} Likes</div>
                     <div onClick={() => { upComments(!comments) }}><SmsOutlinedIcon style={{ fontSize: "18px" }} /> Comments</div>
                     <div><ShareIcon style={{ fontSize: "18px" }} /> Share</div>
                 </div>
-                {comments && <div className='comments'>
-                    <div className="type">
-                        <Avatar sx={{ width: 25, height: 25 }} />
-                        <input type="text" placeholder='write a comment' name="comment" value={commentDetails.comment} onChange={onChai} />
-                        <button onClick={onClickAdd}>send</button>
-                    </div>
-                    {data.map((val) => {
-                        if (val.postId === props.id) {
-                            return <Comments key={val._id} id={val._id} comment={val.comment} username={val.username} createdDate={val.createdDate}/>
-                        }
-                    })}
-                </div>}
+                {comments && <Comments postId={props.id} />}
             </div>
         </div>
     );

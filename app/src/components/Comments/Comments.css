@@ -29,6 +29,8 @@
     display: flex;
     gap: 10px;
     padding-right:20px;
+    width: 100%;
+    background-color: #5e6ff9;
 }
 
 .comment > .comSec > .comComment{
@@ -38,6 +40,9 @@
 .comment > .time{
     font-size: 10px;
     align-self: center;
+    position: relative;
     color: #666;
     white-space: nowrap;
+    background-color: #666;
+    justify-self: flex-end;
 }

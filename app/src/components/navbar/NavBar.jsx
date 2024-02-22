@@ -68,7 +68,7 @@ function NavBar() {
                 <EmailOutlinedIcon style={cur} />
                 <NotificationsNoneOutlinedIcon style={cur}/>
                 
-                <div style={cur} className="proNamehider" ><Link to={`/profile/${currentUser._id}`} style={{textDecoration:"none",color:!mode ? "white" : "black"}} ><Avatar />{currentUser.username}</Link></div>
+                <div style={cur} className="proNamehider" ><Link to={`/profile/${currentUser.username}`} style={{textDecoration:"none",color:!mode ? "white" : "black"}} ><Avatar />{currentUser.username}</Link></div>
             </div>
         </div>
     );

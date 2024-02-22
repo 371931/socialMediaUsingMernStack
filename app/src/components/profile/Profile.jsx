@@ -13,30 +13,85 @@ import LanguageIcon from '@mui/icons-material/Language';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import { AuthContext } from "../../context/authContext.js";
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useLocation } from "react-router-dom";
 
 function Profile() {
 
     const { mode } = useContext(myContext);
-    const {currentUser}= useContext(AuthContext);
+    const { currentUser } = useContext(AuthContext);
+    let userName = useLocation().pathname.split("/")[2];
+
+    const { isPending: isloading, err, data: userInfo } = useQuery({
+        queryKey: ['user'],
+        queryFn: async () =>
+            await axios.get("http://localhost:3001/userInfo/getProfile?userName=" + userName, { withCredentials: true }).then((res) =>
+                res.data
+            ).catch(err => console.log(err))
+    })
 
     const { isPending, error, data } = useQuery({
         queryKey: ['posts'],
-        queryFn: async() =>
-          await axios.get("http://localhost:3001/post/allPosts",{withCredentials: true}).then((res) =>
-            res.data,
-            ).catch(err=> console.log(err))
-    })
+        queryFn: async () =>
+            await axios.get("http://localhost:3001/post/allPosts", { withCredentials: true }).then((res) =>
+                res.data,
+            ).catch(err => console.log(err))
+    });
 
-    let postOfUser = data && data.filter(val=> val.userId == currentUser._id);
+    const { isPending: loading, error: errorF, data: followData } = useQuery({
+        queryKey: ['follow'],
+        queryFn: async () =>
+            await axios.get("http://localhost:3001/follwers/getFollwers", { withCredentials: true }).then((res) =>
+                res.data,
+            ).catch(err => console.log(err.response.data))
+    });
 
-    console.log(postOfUser);
+    let postOfUser = data && data.filter(val => val.username == userName);
+
+    const queryClient = useQueryClient()
+
+
+    // Mutations
+    const mutation = useMutation(() => {
+        return axios.delete("http://localhost:3001/follwers/unFollowed?follwedIdQ="+userInfo._id,{ withCredentials: true })
+    },
+    {
+        onSuccess: () => {
+            queryClient.invalidateQueries(["follow"]);
+        },
+        onError: (error) => {
+            console.log(error);
+        },
+    });
+
+    const mutation1 = useMutation(() => {
+        return axios.post(`http://localhost:3001/follwers/followed?follwedIdQ=${userInfo._id}&follwerId=${currentUser._id}`,{ withCredentials: true })
+    },
+    {
+        onSuccess: () => {
+            queryClient.invalidateQueries(["follow"]);
+        },
+        onError: (error) => {
+            console.log(error);
+        },
+    });
+
+    async function handleFollow(e) {
+        e.preventDefault();
+
+        if(e.target.innerText === "following"){
+            mutation.mutate();
+        }else{
+            mutation1.mutate();
+        }
+
+    }
 
     return (
         <div className="profileMain" style={{ backgroundColor: !mode && "#333", color: !mode && "white" }}>
-            <img src={currentUser.coverImg} alt="" className="coverImg" />
+            <img src={userInfo && userInfo.coverImg} alt="" className="coverImg" />
             <div className="sec2Pro" style={{ backgroundColor: !mode && "#222", color: !mode && "white" }}>
-                <img src={currentUser.profileImg} alt="" className="proPhoto" />
+                <img src={userInfo && userInfo.profileImg} alt="" className="proPhoto" />
                 <div className="icons">
                     <FacebookIcon style={{ cursor: "pointer" }} className="samue" />
                     <InstagramIcon style={{ cursor: "pointer" }} className="samue" />
@@ -45,20 +100,21 @@ function Profile() {
                     <RedditIcon style={{ cursor: "pointer" }} className="samue" />
                 </div>
                 <div className="detailsPro" >
-                    <div className="namePro">{currentUser.username}</div>
+                    <div className="namePro">{userInfo && userInfo.username}</div>
                     <div className="locationLang">
-                        <div><FmdGoodIcon style={{ fontSize: "12" }} /> {currentUser.location}</div>
-                        <div><LanguageIcon style={{ fontSize: "12" }} /> {currentUser.language}</div>
+                        <div><FmdGoodIcon style={{ fontSize: "12" }} /> {userInfo && userInfo.location}</div>
+                        <div><LanguageIcon style={{ fontSize: "12" }} /> {userInfo && userInfo.language}</div>
                     </div>
-                    <button>follow</button>
+                    {userInfo && userInfo._id !== currentUser._id ? <button onClick={handleFollow}>{followData && followData.includes(userInfo._id) ? "following" : "follow"}</button> : <button>Update</button>}
                 </div>
                 <div className="thirDiv">
-                    <EmailOutlinedIcon style={{ cursor: "pointer" }} className="rightSiders"/>
-                    <MoreVertOutlinedIcon style={{ cursor: "pointer" }} className="rightSiders"/>
+                    <EmailOutlinedIcon style={{ cursor: "pointer" }} className="rightSiders" />
+                    <MoreVertOutlinedIcon style={{ cursor: "pointer" }} className="rightSiders" />
                 </div>
             </div>
             <div className="profilePosts">
-                {isPending ? "Loding" : data && (postOfUser.map(val => <Posts content={val.content} key={val._id} id={val._id} userId={val.userId}  username={val.username} postCretedDate={val.postedDate}/>))}
+                {isPending ? "Loding" : data && (postOfUser.map(val => <Posts content={val.content} key={val._id} id={val._id} userId={val.userId} username={val.username} imgSrc={val.imgUrl ? val.imgUrl : null} postCretedDate={val.postedDate} />
+                ))}
             </div>
         </div>
     );

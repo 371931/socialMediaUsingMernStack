@@ -4,6 +4,9 @@ import cors from "cors";
 import router from "./Routes/auth.js";
 import postRouter from "./Routes/posts.js";
 import commentRoute from "./Routes/comments.js";
+import likesRouter from "./Routes/likes.js";
+import usersRoute from "./Routes/user.js"
+import follwersRoute from "./Routes/follwers.js";
 import env from "dotenv";
 import cookieParser from "cookie-parser";
 import multer from "multer";
@@ -39,6 +42,9 @@ app.post("/post/upload",upload.single("file"),(req,res)=>{
 app.use("/auth", router);
 app.use("/post", postRouter);
 app.use("/comment", commentRoute);
+app.use("/likes", likesRouter);
+app.use("/userInfo", usersRoute);
+app.use("/follwers",follwersRoute);
 
 app.listen(3001,(err)=>{
     err && console.log(err);

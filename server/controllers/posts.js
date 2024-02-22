@@ -1,7 +1,6 @@
 import db from "../connect.js";
 import jwt from "jsonwebtoken";
 import moment from "moment/moment.js";
-import multer from "multer";
 
 const collectionPost = db.collection("posts");
 const collectionFollow = db.collection("followers");
@@ -9,7 +8,7 @@ export const getPosts = async (req, res) => {
     const token = req.cookies.accessToken;
 
     jwt.verify(token,"secretKey",async(err,result)=>{
-        let allPosts = await collectionPost.find();
+        let allPosts = await collectionPost.find().sort({postedDate: -1});
         let ogAllposts = await allPosts.toArray();
         let follwedId = await collectionFollow.find({followerId: result.id});
         let followedIds = await follwedId.toArray();
@@ -26,8 +25,6 @@ export const getPosts = async (req, res) => {
 
 export const addPost = (req,res)=>{
     let val = req.body;
-    
-    console.log(val);
 
     const token = req.cookies.accessToken;
     if(!token) return res.status(401).json("not logged in");

@@ -29,7 +29,7 @@ function Home() {
             <Stories />
             <AddPost />
             <div className="homePosts">
-                {isPending ? "loading" : data ? (data.map(val=><Posts content={val.content} key={val._id} id={val._id} userId={val.userId}  username={val.username} imgSrc={val.imgUrl ? val.imgUrl : null} postCretedDate={val.postedDate}/>)) : "Can not Connect to Api"}
+                {isPending ? "Can not Connect to Api" : data ? (data.map(val=><Posts content={val.content} key={val._id} id={val._id} userId={val.userId}  username={val.username} imgSrc={val.imgUrl ? val.imgUrl : null} postCretedDate={val.postedDate}/>)) : "loading"}
             </div>
         </div>
     );

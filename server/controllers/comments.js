@@ -30,11 +30,11 @@ export const addComments = async (req, res) => {
         let token = await req.cookies.accessToken;
         if (!token) return res.json("user not logged In").status(401);
 
-        jwt.verify(token, "secretKey", (err, result) => {
+        jwt.verify(token, "secretKey", async(err, result) => {
             if (err) return res.json(err);
 
             try {
-                collectionComments.insertOne({
+                await collectionComments.insertOne({
                     postId: val.commentDetails.postId,
                     comment: val.commentDetails.comment,
                     username: val.commentDetails.username,
@@ -48,8 +48,6 @@ export const addComments = async (req, res) => {
                 console.log(err);
             }
         });
-
-        console.log(val);
     } catch (err) {
         console.log(err);
     }

@@ -25,7 +25,7 @@ function Leftbar(){
 
     return(
         <div className="leftBar" style={{backgroundColor: !mode && "#222",color: !mode && "white"}}>
-            <div className="profile"><Avatar className="profilr" /> <Link style={{textDecoration:"none", color: mode  ? "black" : "white"}} to={`/profile/${currentUser._id}`} >{currentUser.username}</Link></div>
+            <div className="profile"><Avatar className="profilr" /> <Link style={{textDecoration:"none", color: mode  ? "black" : "white"}} to={`/profile/${currentUser.username}`} >{currentUser.username}</Link></div>
             <div className="friends"><img src={Friends} alt="" /> Friends</div>
             <div className="group"><img src={Groups} alt="" /> Groups</div>
             <div><img src={Market} alt="" /> Marketplace</div>
