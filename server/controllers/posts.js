@@ -26,6 +26,8 @@ export const getPosts = async (req, res) => {
 export const addPost = (req,res)=>{
     let val = req.body;
 
+    console.log(val);
+
     const token = req.cookies.accessToken;
     if(!token) return res.status(401).json("not logged in");
     

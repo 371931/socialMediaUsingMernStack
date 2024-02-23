@@ -38,6 +38,20 @@ app.post("/post/upload",upload.single("file"),(req,res)=>{
     res.status(200).json(file.filename);
 });
 
+app.post("/userInfo/upload",upload.array("coverImg","profileImg"),(req,res)=>{
+  let file = req.body;
+  res.status(200).json(file.filename);
+});
+
+app.post("/userInfo/uploadCover",upload.single("file"),(req,res)=>{
+  let file = req.file;
+    res.status(200).json(file.filename);
+});
+
+app.post("/userInfo/uploadPro",upload.single("file"),(req,res)=>{
+  let file = req.file;
+  res.status(200).json(file.filename);
+});
 
 app.use("/auth", router);
 app.use("/post", postRouter);

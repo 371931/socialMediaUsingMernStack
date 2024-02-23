@@ -11,8 +11,6 @@ export const getFollowers = (req,res)=>{
         jwt.verify(token,"secretKey",async(err,result)=>{
             if(err) console.log(err)
 
-            console.log(result);
-
             let follwedId = await collectionFollow.find({followerId: result.id}).toArray();
             let followersToSend = follwedId.map(val=>val.followedId); 
             res.json(followersToSend).status(200);
@@ -39,7 +37,7 @@ export const postFollowers = async(req,res)=>{
             res.json("Follwed").status(200);
         })
     }catch(err){
-        console.log(log);
+        console.log(err);
     }
 }
 }

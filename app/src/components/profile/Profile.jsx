@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import "./Profile.css";
 import axios from "axios";
 import Posts from "../Posts/Posts.jsx";
@@ -15,12 +15,14 @@ import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import { AuthContext } from "../../context/authContext.js";
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLocation } from "react-router-dom";
+import Update from "../Update/Update.jsx";
 
 function Profile() {
 
     const { mode } = useContext(myContext);
     const { currentUser } = useContext(AuthContext);
     let userName = useLocation().pathname.split("/")[2];
+    const [updateShow,upShow] = useState(false);
 
     const { isPending: isloading, err, data: userInfo } = useQuery({
         queryKey: ['user'],
@@ -29,6 +31,8 @@ function Profile() {
                 res.data
             ).catch(err => console.log(err))
     })
+
+    console.log(userInfo);
 
     const { isPending, error, data } = useQuery({
         queryKey: ['posts'],
@@ -48,7 +52,7 @@ function Profile() {
 
     let postOfUser = data && data.filter(val => val.username == userName);
 
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
 
 
     // Mutations
@@ -89,9 +93,9 @@ function Profile() {
 
     return (
         <div className="profileMain" style={{ backgroundColor: !mode && "#333", color: !mode && "white" }}>
-            <img src={userInfo && userInfo.coverImg} alt="" className="coverImg" />
+            <img src={userInfo && `/uploads/${userInfo.coverImg}`} alt="" className="coverImg" />
             <div className="sec2Pro" style={{ backgroundColor: !mode && "#222", color: !mode && "white" }}>
-                <img src={userInfo && userInfo.profileImg} alt="" className="proPhoto" />
+                <img src={userInfo && `/uploads/${userInfo.profileImg}`} alt="" className="proPhoto" />
                 <div className="icons">
                     <FacebookIcon style={{ cursor: "pointer" }} className="samue" />
                     <InstagramIcon style={{ cursor: "pointer" }} className="samue" />
@@ -102,10 +106,10 @@ function Profile() {
                 <div className="detailsPro" >
                     <div className="namePro">{userInfo && userInfo.username}</div>
                     <div className="locationLang">
-                        <div><FmdGoodIcon style={{ fontSize: "12" }} /> {userInfo && userInfo.location}</div>
-                        <div><LanguageIcon style={{ fontSize: "12" }} /> {userInfo && userInfo.language}</div>
+                        {userInfo && userInfo.location && <div><FmdGoodIcon style={{ fontSize: "12" }} /> {userInfo && userInfo.location}</div>}
+                        {userInfo && userInfo.language && <div><LanguageIcon style={{ fontSize: "12" }} /> {userInfo && userInfo.language}</div>}
                     </div>
-                    {userInfo && userInfo._id !== currentUser._id ? <button onClick={handleFollow}>{followData && followData.includes(userInfo._id) ? "following" : "follow"}</button> : <button>Update</button>}
+                    {userInfo && userInfo._id !== currentUser._id ? <button onClick={handleFollow}>{followData && followData.includes(userInfo._id) ? "following" : "follow"}</button> : <button onClick={()=>{upShow(!updateShow)}}>Update</button>}
                 </div>
                 <div className="thirDiv">
                     <EmailOutlinedIcon style={{ cursor: "pointer" }} className="rightSiders" />
@@ -116,6 +120,7 @@ function Profile() {
                 {isPending ? "Loding" : data && (postOfUser.map(val => <Posts content={val.content} key={val._id} id={val._id} userId={val.userId} username={val.username} imgSrc={val.imgUrl ? val.imgUrl : null} postCretedDate={val.postedDate} />
                 ))}
             </div>
+            {updateShow && <Update userInfo={userInfo} updateShow={updateShow}  upShow={upShow}/>}
         </div>
     );
 }
