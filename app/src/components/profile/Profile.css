@@ -54,6 +54,7 @@
 .sec2Pro  > .detailsPro > .namePro{
     font-size: 25px;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .sec2Pro  > .detailsPro > .locationLang{

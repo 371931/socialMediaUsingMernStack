@@ -24,6 +24,41 @@
     gap: 10px;   
 }
 
+.rightP{
+    position: relative;
+}
+
+.rightP > button{
+    background-color: #df475b;
+    padding: 5px;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 12px;
+    position: absolute;
+    left: -15px;
+    top: 20px;
+    cursor: pointer;    
+}
+
+.rightP > button::before{
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 5px;
+    opacity: .1;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.rightP > button:hover::before{
+    visibility: visible;
+}
+
 .namePost > .name{
     font-size: 14px;   
     font-weight: 600;

@@ -59,7 +59,7 @@ export default function Update(props) {
   const queryClient = useQueryClient();
 
   const mutation2 = useMutation((mutationData) => {
-    return axios.put("http://localhost:3001/userInfo/updateProfile", mutationData, { withCredentials: true });
+    return axios.put("http://localhost:3001/userInfo/updateProfile", mutationData, { withCredentials: true })
   }, {
     onSuccess: () => {
       queryClient.invalidateQueries("user");
@@ -69,7 +69,7 @@ export default function Update(props) {
       onError: (err) => {
         console.log(err);
       }
-    })
+  });
 
   const [coverImg, upCover] = useState(null);
   const [profileImg, upProImg] = useState(null);

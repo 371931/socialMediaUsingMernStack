@@ -1,6 +1,7 @@
 import db from "../connect.js";
 import jwt from "jsonwebtoken";
 import moment from "moment/moment.js";
+import { ObjectId } from "mongodb";
 
 const collectionPost = db.collection("posts");
 const collectionFollow = db.collection("followers");
@@ -40,7 +41,8 @@ export const addPost = (req,res)=>{
             userId: result.id,
             content: val.postd.content,
             postedDate: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-            imgUrl: val.img || null
+            imgUrl: val.img || null,
+            likes: []
         });
         console.log("postAdded");
         res.json("postAdded");
@@ -49,4 +51,26 @@ export const addPost = (req,res)=>{
             res.status(401).json("err");
         }
     });
+}
+
+export const deletePost = async(req,res)=>{
+    let postId = req.query.postId;
+    let postObjectId = new ObjectId(postId);
+    try{
+        let token = req.cookies.accessToken;
+        if(!token)return res.status(401).json("user not logged in");
+
+        jwt.verify(token,"scretKey",async(err,result)=>{
+            try{
+            console.log("postDeleted");
+            await collectionPost.deleteOne({_id: postObjectId});
+            }catch(err){
+                console.log(err);
+            } 
+
+            res.status(200).json("Deleted");
+        });
+    }catch(err){
+        console.log(err);
+    }
 }

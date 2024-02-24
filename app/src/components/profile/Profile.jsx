@@ -32,10 +32,8 @@ function Profile() {
             ).catch(err => console.log(err))
     })
 
-    console.log(userInfo);
-
     const { isPending, error, data } = useQuery({
-        queryKey: ['posts'],
+        queryKey: ['posters'],
         queryFn: async () =>
             await axios.get("http://localhost:3001/post/allPosts", { withCredentials: true }).then((res) =>
                 res.data,
@@ -88,7 +86,6 @@ function Profile() {
         }else{
             mutation1.mutate();
         }
-
     }
 
     return (
@@ -104,7 +101,7 @@ function Profile() {
                     <RedditIcon style={{ cursor: "pointer" }} className="samue" />
                 </div>
                 <div className="detailsPro" >
-                    <div className="namePro">{userInfo && userInfo.username}</div>
+                    <div className="namePro">{userInfo && !userInfo.name && userInfo.username}{userInfo && userInfo.name && userInfo.name}</div>
                     <div className="locationLang">
                         {userInfo && userInfo.location && <div><FmdGoodIcon style={{ fontSize: "12" }} /> {userInfo && userInfo.location}</div>}
                         {userInfo && userInfo.language && <div><LanguageIcon style={{ fontSize: "12" }} /> {userInfo && userInfo.language}</div>}
@@ -117,7 +114,7 @@ function Profile() {
                 </div>
             </div>
             <div className="profilePosts">
-                {isPending ? "Loding" : data && (postOfUser.map(val => <Posts content={val.content} key={val._id} id={val._id} userId={val.userId} username={val.username} imgSrc={val.imgUrl ? val.imgUrl : null} postCretedDate={val.postedDate} />
+                {isPending ? "Loding" : data && (postOfUser.map(val => <Posts content={val.content} key={val._id} id={val._id} userId={val.userId} username={val.username} imgSrc={val.imgUrl ? val.imgUrl : null} postCretedDate={val.postedDate} likes={val.likes}/>
                 ))}
             </div>
             {updateShow && <Update userInfo={userInfo} updateShow={updateShow}  upShow={upShow}/>}

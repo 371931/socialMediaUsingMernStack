@@ -1,7 +1,9 @@
+import { ObjectId } from "mongodb";
 import db from "../connect.js";
 import jwt  from "jsonwebtoken";
 
 const collectionLikes = db.collection("likes");
+const collectionPost = db.collection("posts");
 
 export const getLikes = async(req,res)=>{
     
@@ -25,24 +27,29 @@ export const likePost = (req,res)=>{
     if(!token) return res.status(401).json("user not logged in")
 
     jwt.verify(token,"secretKey",async(err,result)=>{
-        await collectionLikes.insertOne({
-            userId: val.userId,
-            postId: val.postId,
-        });
+        try{
+        let postId = new ObjectId(val.postId);
+        let postLikes = await collectionPost.findOne({_id: postId},{likes: 1, _id: 0});
+        let arrayToUp = postLikes.likes;
+        arrayToUp.push(val.userId); 
+        await collectionPost.updateOne({_id: postId},{$set:{likes:arrayToUp}},{$upsert: true}); 
+        }catch(err){console.log(err)}
     });
 }
 
 export const removeLike = (req,res)=>{
     let userId = req.query.userId;
-    let postId = req.query.postId;
+    let postId1 = req.query.postId;
+
     let token = req.cookies.accessToken;
     if(!token) return res.status(401).json("user not logged in")
 
     jwt.verify(token,"secretKey",async(err,result)=>{
-        await collectionLikes.deleteMany({
-            userId: userId,
-            postId: postId,
-        });
-        console.log("removed successfully");
+        try{
+        let postId = new ObjectId(postId1);
+        let postLikes = await collectionPost.findOne({_id: postId},{likes: 1, _id: 0});
+        let arrayToUp = postLikes.likes.filter(val=> !userId);
+        await collectionPost.updateOne({_id: postId},{$set:{likes: arrayToUp}},{$upsert: true}); 
+        }catch(err){console.log(err)}
     });
 }

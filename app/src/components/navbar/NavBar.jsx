@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./NavBar.css";
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
@@ -12,18 +12,19 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { myContext } from "../../App";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
+import Button from '@mui/material/Button';
 
 function NavBar() {
-
-    const {currentUser} = useContext(AuthContext);
+    const { currentUser, logout } = useContext(AuthContext);
     const { mode, updateMode } = useContext(myContext);
-    const [searchMobile,upSearchMobile] = useState(false);
+    const [searchMobile, upSearchMobile] = useState(false);
+    const [logoutShow, uplogoutShow] = useState(false);
 
     function onCliFocus() {
         document.querySelector("#searchBar").focus();
     }
 
-    function onCliMobi(){
+    function onCliMobi() {
         upSearchMobile(!searchMobile);
         document.querySelector("#searchBarMobi").focus();
     }
@@ -38,37 +39,40 @@ function NavBar() {
         }
     }
 
-    const cur = { cursor: "pointer"};
+    const cur = { cursor: "pointer" };
 
     return (
-        <div className="nav" style={{backgroundColor: !mode && "#222",color: !mode && "white"}}>
+        <div className="nav" style={{ backgroundColor: !mode && "#222", color: !mode && "white" }}>
             <div className="nav-left">
-                <Link to="/" style={{textDecoration:"none",color:!mode ? "white" : "black"}} >
-                <div className="appName">LevelUp</div>
+                <Link to="/" style={{ textDecoration: "none", color: !mode ? "white" : "black" }} >
+                    <div className="appName">LevelUp</div>
                 </Link>
-                <Link to="/" style={{textDecoration:"none",color:!mode ? "white" : "black"}} >
-                <HomeOutlinedIcon style={cur} />
+                <Link to="/" style={{ textDecoration: "none", color: !mode ? "white" : "black" }} >
+                    <HomeOutlinedIcon style={cur} />
                 </Link>
                 {mode ? <LightModeOutlinedIcon onClick={() => { onClickMode("dark") }} style={cur} /> : <DarkModeOutlinedIcon onClick={() => { onClickMode("sun") }} style={cur} />}
                 <GridViewIcon style={cur} />
                 <div className="search">
                     <div className="searchMobile">
-                    <SearchOutlinedIcon onClick={onCliMobi} className="icon" style={{border:"1px solid black",borderColor: !mode && "#555"}} />
-                    <input type="text" name="serach" id="searchBarMobi" placeholder="search..." style={{backgroundColor: !mode && "#222",color: !mode && "white",borderColor: !mode && "#555",visibility: searchMobile ? "visible" : "hidden"}} />
+                        <SearchOutlinedIcon onClick={onCliMobi} className="icon" style={{ border: "1px solid black", borderColor: !mode && "#555" }} />
+                        <input type="text" name="serach" id="searchBarMobi" placeholder="search..." style={{ backgroundColor: !mode && "#222", color: !mode && "white", borderColor: !mode && "#555", visibility: searchMobile ? "visible" : "hidden" }} />
                     </div>
 
                     <div className="searchLaptop">
-                    <SearchOutlinedIcon onClick={onCliFocus} className="icon searchLaptop" style={cur} />
-                    <input type="text" name="serach" id="searchBar" placeholder="search..." style={{backgroundColor: !mode && "#222",color: !mode && "white",borderColor: !mode && "#555"}} />
+                        <SearchOutlinedIcon onClick={onCliFocus} className="icon searchLaptop" style={cur} />
+                        <input type="text" name="serach" id="searchBar" placeholder="search..." style={{ backgroundColor: !mode && "#222", color: !mode && "white", borderColor: !mode && "#555" }} />
                     </div>
                 </div>
             </div>
             <div className="nav-right">
-                <PersonOutlineOutlinedIcon style={cur} />
+                <div className="logoutIconner">
+                    <PersonOutlineOutlinedIcon style={cur} onClick={() => { uplogoutShow(!logoutShow) }} />
+                    {logoutShow && <Button variant="contained" color="error" onClick={logout}>Logout</Button>}
+                </div>
                 <EmailOutlinedIcon style={cur} />
-                <NotificationsNoneOutlinedIcon style={cur}/>
-                
-                <div style={cur} className="proNamehider" ><Link to={`/profile/${currentUser.username}`} style={{textDecoration:"none",color:!mode ? "white" : "black"}} ><Avatar />{currentUser.username}</Link></div>
+                <NotificationsNoneOutlinedIcon style={cur} />
+
+                <div style={cur} className="proNamehider" ><Link to={`/profile/${currentUser.username}`} style={{ textDecoration: "none", color: !mode ? "white" : "black" }} ><Avatar />{currentUser.username}</Link></div>
             </div>
         </div>
     );
